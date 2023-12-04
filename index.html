@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TOP ISOL - Convertisseur Cycles et Kilos</title>
+    <style>
+        body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    width: auto;
+    max-width: 500px;
+    margin: auto;
+}
+
+h1 {
+    color: #34a853;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+h2 {
+    color: #757575;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: #212121;
+}
+
+input[type="number"], .result {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 20px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    border: 1px solid #bdbdbd;
+}
+
+button {
+    width: 100%;
+    background-color: #34a853;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2e7d32;
+}
+
+#result {
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Styles supplémentaires pour l'accessibilité et les retours interactifs */
+input[type="radio"]:checked + label {
+    color: #34a853;
+}
+
+input[type="radio"]:focus + label {
+    outline: 1px dotted #34a853;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TOP ISOL</h1>
+        <h2>Convertisseur cycles et kg machines Graco/Novag</h2>
+        
+        <div class="form-group">
+            <label><input type="radio" name="inputType" value="kg" checked> Kilogrammes</label>
+            <label><input type="radio" name="inputType" value="cycle"> Cycles</label>
+        </div>
+
+        <div class="form-group">
+            <label for="inputValue">Valeur:</label>
+            <input type="number" id="inputValue" placeholder="Entrez la valeur">
+        </div>
+
+        <div class="form-group">
+            <label><input type="radio" name="machineType" value="novag" checked> NOVAG</label>
+            <label><input type="radio" name="machineType" value="graco"> GRACO</label>
+        </div>
+
+        <button onclick="convert()">Convertir</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function convert() {
+            var inputType = document.querySelector('input[name="inputType"]:checked').value;
+            var machineType = document.querySelector('input[name="machineType"]:checked').value;
+            var inputValue = document.getElementById('inputValue').value;
+            var resultText = '';
+
+            if (inputType === 'kg') {
+                var cyclesNovag = inputValue * 3.6;
+                var cyclesGraco = inputValue * 8.16;
+
+                resultText = `
+                    <strong>Kilogrammes:</strong> ${inputValue}<br>
+                    <strong>Cycles NOVAG:</strong> ${cyclesNovag.toFixed(2)}<br>
+                    <strong>Cycles GRACO:</strong> ${cyclesGraco.toFixed(2)}
+                `;
+            } else if (inputType === 'cycle') {
+                var kgs, cyclesOtherMachine;
+
+                if (machineType === 'novag') {
+                    kgs = inputValue / 3.6;
+                    cyclesOtherMachine = kgs * 8.16;
+                    resultText = `
+                        <strong>Cycles NOVAG:</strong> ${inputValue}<br>
+                        <strong>Kilogrammes:</strong> ${kgs.toFixed(2)}<br>
+                        <strong>Cycles GRACO équivalents:</strong> ${cyclesOtherMachine.toFixed(2)}
+                    `;
+                } else if (machineType === 'graco') {
+                    kgs = inputValue / 8.16;
+                    cyclesOtherMachine = kgs * 3.6;
+                    resultText = `
+                        <strong>Cycles GRACO:</strong> ${inputValue}<br>
+                        <strong>Kilogrammes:</strong> ${kgs.toFixed(2)}<br>
+                        <strong>Cycles NOVAG équivalents:</strong> ${cyclesOtherMachine.toFixed(2)}
+                    `;
+                }
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+    </script>
+</body>
+</html>
